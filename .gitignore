@@ -1,0 +1,20 @@
+# Datasets (too large for GitHub)
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

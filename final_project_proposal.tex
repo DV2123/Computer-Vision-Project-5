@@ -1,0 +1,50 @@
+\documentclass[9pt]{article}
+\usepackage[margin=0.6in, top=0.3in, bottom=0.5in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlength{\parskip}{2pt}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+    \textbf{\large Final Project Proposal}\\[3pt]
+    \textbf{RetinAlert: A CNN-Based Drowsiness Detection System Using Eye Aspect Ratio and Pupil Dynamics}\\[3pt]
+    Divya Vinaybhai Patel \hspace{10pt} | \hspace{10pt} April 2026
+\end{center}
+\vspace{-0.2cm}
+
+\subsection*{Project Description}
+Driver drowsiness is a leading cause of fatal road accidents, responsible for an estimated 20\% of all traffic collisions. The National Highway Traffic Safety Administration (NHTSA) reports that drowsy driving causes over 100,000 crashes annually in the US alone. Current detection solutions rely on expensive hardware such as EEG sensors or vehicle telemetry systems, making them impractical for everyday use. This project proposes \textbf{RetinAlert}, a non-intrusive, camera-only driver drowsiness detection system that monitors alertness in real-time using multiple ocular and facial cues. The system combines a CNN-based eye state classifier with Eye Aspect Ratio (EAR) analysis, PERCLOS computation, pupil dynamics tracking, yawn detection, and head pose estimation to produce a robust multi-factor drowsiness score. When fatigue is detected, an audible alarm alerts the driver. Unlike most existing camera-based systems that rely on one or two indicators, RetinAlert fuses six independent drowsiness indicators into a single weighted scoring framework, reducing false positives compared to single-factor approaches.
+
+\subsection*{Approach}
+\begin{itemize}[nosep, leftmargin=*, topsep=0pt]
+    \item \textbf{Eye State Classification:} A CNN trained on the MRL Eye Dataset (~85K images) classifies eyes as open/closed. The model uses convolutional layers with max pooling and dropout for robust feature extraction.
+    \item \textbf{Eye Aspect Ratio (EAR):} Ratio of eye height to width computed from 6 facial landmarks per eye. A sustained low EAR indicates prolonged eye closure. Blink rate is also tracked --- normal is 15--20 blinks/min; fewer indicates fatigue.
+    \item \textbf{PERCLOS:} Percentage of eye closure over a 30-second sliding window --- a gold-standard drowsiness metric validated in sleep research and used in the Arefnezhad et al. (2022) EEG study.
+    \item \textbf{Pupil Dynamics:} Pupil size variation and gaze direction tracked via MediaPipe Iris. Slow pupil response and unfocused gaze are strong indicators of fatigue.
+    \item \textbf{Yawn Detection:} Mouth Aspect Ratio (MAR) computed from lip landmarks. Frequent yawning (more than 3 per minute) signals drowsiness onset.
+    \item \textbf{Head Pose Estimation:} Head tilt, pitch, and nod angle via MediaPipe Face Mesh. Forward head drooping beyond a threshold indicates micro-sleep episodes.
+\end{itemize}
+\vspace{1pt}
+A weighted combination of all six factors produces a final drowsiness score classified into three levels: \textbf{Alert} (score $<$ 0.3), \textbf{Mildly Drowsy} (0.3--0.6), or \textbf{Severely Drowsy} ($>$ 0.6). An audible alarm and visual warning are triggered at the severe level.
+
+\subsection*{Key Novel Contributions}
+\begin{itemize}[nosep, leftmargin=*, topsep=0pt]
+    \item \textbf{Six-Factor Weighted Fusion:} Most existing systems use 1--2 indicators. RetinAlert combines six independent cues into a single robust score, significantly reducing false positives and missed detections.
+    \item \textbf{Adaptive Thresholds:} Drowsiness sensitivity automatically increases with driving duration. A driver at 2 hours gets stricter thresholds than at 10 minutes, since fatigue accumulates over time.
+    \item \textbf{Drowsiness Trend Prediction:} Beyond detecting the current state, the system tracks the drowsiness score over a sliding time window and predicts if the driver is \textit{trending towards} severe drowsiness --- issuing an early warning before it becomes critical.
+\end{itemize}
+
+\subsection*{Dataset and Tools}
+\textbf{Dataset:} MRL Eye Dataset (Kaggle) --- ~85,000 infrared eye images labeled open/closed across multiple subjects and lighting conditions. No additional data collection required.\\
+\textbf{Tools:} Python, PyTorch (CNN training), OpenCV (image processing, webcam), MediaPipe (face mesh, iris tracking), NumPy, Matplotlib, playsound.
+
+\subsection*{Deliverables}
+Trained CNN model for eye state classification, real-time webcam application with a visual dashboard displaying all six factors live, configurable alarm system, IEEE-format report with experimental evaluation, and a video demonstration under 15 minutes.
+
+\vspace{2pt}
+\noindent{\small \textbf{References:} [1] Arefnezhad et al., \textit{Sci. Rep.}, 2022. [2] Deng \& Wu, \textit{IEEE Access}, 2019. [3] Maior et al., \textit{Expert Syst. w/ App.}, 2020.}
+
+\end{document}
